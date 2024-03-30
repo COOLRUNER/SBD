@@ -1,0 +1,96 @@
+Procedures:
+
+1)This procedure lists the top 5 movies in the database with the most awards. It uses a cursor to count awards for each movie and displays the movie ID, title, and award count.
+
+CREATE OR REPLACE PROCEDURE Top_5_most_awarded_movies_in_my_database AS
+CURSOR cur IS
+SELECT Movie.ID, Movie.Title, COUNT(Award.ID) AS AWARDCOUNT
+FROM Movie
+LEFT JOIN Award ON Movie.ID = Award.Movie_ID
+GROUP BY Movie.ID, Movie.Title
+ORDER BY AwardCount DESC;
+counter NUMBER := 0;
+movie_id  integer;
+movie_title nvarchar2(100);
+award_count integer;
+BEGIN
+OPEN cur;
+LOOP
+FETCH cur INTO movie_id, movie_title, award_count;
+EXIT WHEN cur%NOTFOUND OR counter >= 5;
+DBMS_OUTPUT.PUT_LINE('Movie ID: ' || movie_id || ', Title: ' || movie_title || ', Award Count: ' || award_count);
+counter := counter + 1;
+END LOOP;
+CLOSE cur;
+END;
+
+2) The procedure reccomends movies to a user according to the genres of movies whose rating is higher than 7 in their watchlist. 
+
+CREATE OR REPLACE PROCEDURE Recommend_movies_to_the_user_basing_on_the_watchlist_genres(UserID IN INTEGER) AS
+CURSOR cur IS
+SELECT DISTINCT Movie.ID, Movie.Title, Movie.Rating
+FROM Watchlist
+JOIN Movie ON Watchlist.Movie_ID = Movie.ID
+JOIN Movie_Genre ON Movie.ID = Movie_Genre.Movie_ID
+WHERE Watchlist.User__ID = UserID AND Movie.Rating > 7;
+cur_id integer;
+cur_title nvarchar2(100);
+cur_rating integer;
+BEGIN
+OPEN cur;
+LOOP
+FETCH cur INTO cur_id, cur_title, cur_rating;
+EXIT WHEN cur%NOTFOUND;
+DBMS_OUTPUT.PUT_LINE('Recommended Movie ID: ' || cur_id || ', Title: ' || cur_title || ', Rating: ' || cur_rating);
+END LOOP;
+CLOSE cur;
+END;
+
+Triggers:
+
+1)The trigger enforces users` passwords when they change it. It checks if the passwords differ, the length of the password and if the new password contains special symbols. 
+
+CREATE OR REPLACE TRIGGER Check_password_and_give_errors_if_the_password_is_identical_to_the_old_one_also_when_there_is_less_than_8_symbols_in_it_and_as_a_cherry_on_a_cake_it_shows_errors_when_there_is_not_any_special_symbols
+BEFORE UPDATE ON User_
+FOR EACH ROW
+BEGIN
+    IF :NEW.Password_ = :OLD.Password_ THEN
+    RAISE_APPLICATION_ERROR(-20100, 'Passwords should differ');
+    END IF;
+    IF LENGTH(:NEW.Password_)<8 THEN
+    RAISE_APPLICATION_ERROR(-20100, 'New password is too short');
+    END IF;
+    IF NOT REGEXP_LIKE(:NEW.Password_, '[!@#$%^&*()]') THEN
+        RAISE_APPLICATION_ERROR(-20100, 'Password must contain at least one special symbol');
+    END IF;
+    
+END;
+
+--test
+--UPDATE User_
+--SET Password_ = 'yariknelox!'
+--WHERE ID = 9;
+
+2)The trigger restricts users from adding more than 10 movies in their watchlist. When the limit is exceeded a suggestion to support the developer appears.
+
+CREATE OR REPLACE TRIGGER Check_watchlist_and_give_an_error_You_should_pay_me_some_money_to_be_able_to_use_my_great_database`s_functionalities_if_the_limit_is_exceeded
+BEFORE INSERT ON Watchlist
+FOR EACH ROW
+DECLARE
+    watchlist_count INTEGER;
+BEGIN
+    SELECT COUNT(*)
+    INTO watchlist_count
+    FROM Watchlist
+    WHERE User__ID = :NEW.User__ID;
+    IF watchlist_count > 10 THEN
+        RAISE_APPLICATION_ERROR(-20100, 'You should pay me some money to be able to use my great database`s functionalities');
+    END IF;
+END;
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(2459, 13, 2);
+
+--test
+--INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+--VALUES(2459, 13, 2);

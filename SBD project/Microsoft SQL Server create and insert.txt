@@ -1,0 +1,1316 @@
+-- tables
+-- Table: Actor
+CREATE TABLE Actor (
+    ID int  NOT NULL,
+    First_Name varchar(50)  NOT NULL,
+    Last_name varchar(50)  NOT NULL,
+    CONSTRAINT Actor_pk PRIMARY KEY  (ID)
+);
+
+-- Table: Award
+CREATE TABLE Award (
+    ID int  NOT NULL,
+    Movie_ID int  NOT NULL,
+    Name varchar(100)  NOT NULL,
+    Year date  NOT NULL,
+    Award_Category_ID int  NOT NULL,
+    Actor_ID int  NULL,
+    Director_ID int  NULL,
+    CONSTRAINT Award_pk PRIMARY KEY  (ID)
+);
+
+-- Table: Award_Category
+CREATE TABLE Award_Category (
+    ID int  NOT NULL,
+    Name varchar(100)  NOT NULL,
+    CONSTRAINT Award_Category_pk PRIMARY KEY  (ID)
+);
+
+-- Table: Director
+CREATE TABLE Director (
+    ID int  NOT NULL,
+    First_Name varchar(50)  NOT NULL,
+    Last_Name varchar(50)  NOT NULL,
+    CONSTRAINT Director_pk PRIMARY KEY  (ID)
+);
+
+-- Table: Genre
+CREATE TABLE Genre (
+    ID int  NOT NULL,
+    Name varchar(50)  NOT NULL,
+    CONSTRAINT Genre_pk PRIMARY KEY  (ID)
+);
+
+-- Table: Language
+CREATE TABLE Language (
+    ID int  NOT NULL,
+    Name varchar(50)  NOT NULL,
+    CONSTRAINT Language_pk PRIMARY KEY  (ID)
+);
+
+-- Table: Movie
+CREATE TABLE Movie (
+    ID int  NOT NULL,
+    Title varchar(100)  NOT NULL,
+    Rating int  NOT NULL,
+    Director_ID int  NOT NULL,
+    Release_date date  NOT NULL,
+    Plot varchar(500)  NOT NULL,
+    CONSTRAINT Movie_pk PRIMARY KEY  (ID)
+);
+
+-- Table: Movie_Genre
+CREATE TABLE Movie_Genre (
+    Movie_ID int  NOT NULL,
+    Genre_ID int  NOT NULL,
+    CONSTRAINT Movie_Genre_pk PRIMARY KEY  (Movie_ID,Genre_ID)
+);
+
+-- Table: Movie_Language
+CREATE TABLE Movie_Language (
+    Language_ID int  NOT NULL,
+    Movie_ID int  NOT NULL,
+    CONSTRAINT Movie_Language_pk PRIMARY KEY  (Language_ID,Movie_ID)
+);
+
+-- Table: Rewiev
+CREATE TABLE Rewiev (
+    ID int  NOT NULL,
+    Movie_ID int  NOT NULL,
+    Rating int  NOT NULL,
+    User_Rewiev varchar(1000)  NULL,
+    Date date  NOT NULL,
+    User__ID int  NOT NULL,
+    CONSTRAINT Rewiev_pk PRIMARY KEY  (ID)
+);
+
+-- Table: Role
+CREATE TABLE Role (
+    Actor_ID int  NOT NULL,
+    Movie_ID int  NOT NULL,
+    Name varchar(100)  NOT NULL,
+    CONSTRAINT Role_pk PRIMARY KEY  (Actor_ID,Movie_ID)
+);
+
+-- Table: Trailer
+CREATE TABLE Trailer (
+    ID int  NOT NULL,
+    Movie_ID int  NOT NULL,
+    URL varchar(200)  NOT NULL,
+    CONSTRAINT Trailer_pk PRIMARY KEY  (ID)
+);
+
+-- Table: User_
+CREATE TABLE User_ (
+    ID int  NOT NULL,
+    Username varchar(50)  NOT NULL,
+    Email varchar(50)  NOT NULL,
+    Password_ varchar(50)  NOT NULL,
+    CONSTRAINT User__pk PRIMARY KEY  (ID)
+);
+
+-- Table: Watchlist
+CREATE TABLE Watchlist (
+    ID int  NOT NULL,
+    Movie_ID int  NOT NULL,
+    User__ID int  NOT NULL,
+    CONSTRAINT Watchlist_pk PRIMARY KEY  (ID)
+);
+
+-- foreign keys
+-- Reference: Award_Actor (table: Award)
+ALTER TABLE Award ADD CONSTRAINT Award_Actor
+    FOREIGN KEY (Actor_ID)
+    REFERENCES Actor (ID);
+
+-- Reference: Award_Award_Category (table: Award)
+ALTER TABLE Award ADD CONSTRAINT Award_Award_Category
+    FOREIGN KEY (Award_Category_ID)
+    REFERENCES Award_Category (ID);
+
+-- Reference: Award_Director (table: Award)
+ALTER TABLE Award ADD CONSTRAINT Award_Director
+    FOREIGN KEY (Director_ID)
+    REFERENCES Director (ID);
+
+-- Reference: Award_Movie (table: Award)
+ALTER TABLE Award ADD CONSTRAINT Award_Movie
+    FOREIGN KEY (Movie_ID)
+    REFERENCES Movie (ID);
+
+-- Reference: Movie_Director (table: Movie)
+ALTER TABLE Movie ADD CONSTRAINT Movie_Director
+    FOREIGN KEY (Director_ID)
+    REFERENCES Director (ID);
+
+-- Reference: Rewiev_Movie (table: Rewiev)
+ALTER TABLE Rewiev ADD CONSTRAINT Rewiev_Movie
+    FOREIGN KEY (Movie_ID)
+    REFERENCES Movie (ID);
+
+-- Reference: Rewiev_User_ (table: Rewiev)
+ALTER TABLE Rewiev ADD CONSTRAINT Rewiev_User_
+    FOREIGN KEY (User__ID)
+    REFERENCES User_ (ID);
+
+-- Reference: Role_Actor (table: Role)
+ALTER TABLE Role ADD CONSTRAINT Role_Actor
+    FOREIGN KEY (Actor_ID)
+    REFERENCES Actor (ID);
+
+-- Reference: Role_Movie (table: Role)
+ALTER TABLE Role ADD CONSTRAINT Role_Movie
+    FOREIGN KEY (Movie_ID)
+    REFERENCES Movie (ID);
+
+-- Reference: Table_16_Language (table: Movie_Language)
+ALTER TABLE Movie_Language ADD CONSTRAINT Table_16_Language
+    FOREIGN KEY (Language_ID)
+    REFERENCES Language (ID);
+
+-- Reference: Table_16_Movie (table: Movie_Language)
+ALTER TABLE Movie_Language ADD CONSTRAINT Table_16_Movie
+    FOREIGN KEY (Movie_ID)
+    REFERENCES Movie (ID);
+
+-- Reference: Table_6_Genre (table: Movie_Genre)
+ALTER TABLE Movie_Genre ADD CONSTRAINT Table_6_Genre
+    FOREIGN KEY (Genre_ID)
+    REFERENCES Genre (ID);
+
+-- Reference: Table_6_Movie (table: Movie_Genre)
+ALTER TABLE Movie_Genre ADD CONSTRAINT Table_6_Movie
+    FOREIGN KEY (Movie_ID)
+    REFERENCES Movie (ID);
+
+-- Reference: Trailer_Movie (table: Trailer)
+ALTER TABLE Trailer ADD CONSTRAINT Trailer_Movie
+    FOREIGN KEY (Movie_ID)
+    REFERENCES Movie (ID);
+
+-- Reference: Watchlist_Movie (table: Watchlist)
+ALTER TABLE Watchlist ADD CONSTRAINT Watchlist_Movie
+    FOREIGN KEY (Movie_ID)
+    REFERENCES Movie (ID);
+
+-- Reference: Watchlist_User_ (table: Watchlist)
+ALTER TABLE Watchlist ADD CONSTRAINT Watchlist_User_
+    FOREIGN KEY (User__ID)
+    REFERENCES User_ (ID);
+
+-- End of file.
+
+
+
+      --Actors
+
+-- In Bruges
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (1, 'Colin', 'Farrell');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (2, 'Brendan', 'Gleeson');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (3, 'Ralph', 'Fiennes');
+
+-- Parasite
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (4, 'Kang-ho', 'Song');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (5, 'Sun-kyun', 'Lee');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (6, 'Yeo-jeong', 'Jo');
+
+-- The Lighthouse
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (7, 'Robert', 'Pattinson');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (8, 'Willem', 'Dafoe');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (9, 'Valeriia', 'Karaman');
+
+-- The Room
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (10, 'Tommy', 'Wiseau');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (11, 'Juliette', 'Danielle');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (12, 'Greg', 'Sestero');
+
+-- The Game
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (13, 'Michael', 'Douglas');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (14, 'Sean', 'Penn');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (15, 'Deborah', 'Kara Unger');
+
+-- Eternal Sunshine of the Spotless Mind
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (16, 'Jim', 'Carrey');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (17, 'Kate', 'Winslet');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (18, 'Elijah', 'Wood');
+
+-- Birdman
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (19, 'Michael', 'Keaton');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (20, 'Edward', 'Norton');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (21, 'Emma', 'Stone');
+
+-- Scott Pilgrim vs. the World
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (22, 'Michael', 'Cera');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (23, 'Mary Elizabeth', 'Winstead');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (24, 'Keiran', 'Culkin');
+
+-- Banshees of Inisherin
+--Colin Farrell(1)
+--Brendon Gleeson(2)
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (25, 'Kerry', 'Condon');
+
+-- Cars
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (26, 'Owen', 'Wilson');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (27, 'Paul', 'Newman');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (28, 'Bonnie', 'Hunt');
+
+-- Memories of Murder
+--Kang-ho Song (4)
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (29, 'Sang-kyung', 'Kim');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (30, 'Roe-ha', 'Kim');
+
+-- The Naked Gun
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (31, 'Leslie', 'Nielsen');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (32, 'Priscilla', 'Presley');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (33, 'O.J', 'Simpson');
+
+-- Shrek
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (34, 'Mike', 'Myers');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (35, 'Eddie', 'Murphy');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (36, 'Cameron', 'Diaz');
+
+-- Memento
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (37, 'Guy', 'Pearce');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (38, 'Carrie-Anne', 'Moss');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (39, 'Joe', 'Pantoliano');
+
+-- Shutter Island
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (40, 'Leonardo', 'DiCaprio');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (41, 'Mark', 'Ruffalo');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (42, 'Ben', 'Kingsley');
+
+-- Fantastic Mr. Fox
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (43, 'George', 'Clooney');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (44, 'Meryl', 'Streep');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (45, 'Bill', 'Murray');
+
+-- The Lobster
+--Colin Farrell(1)
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (46, 'Rachel', 'Weisz');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (47, 'Lea', 'Seydoux');
+
+--Fight Club
+--Edward Norhton(20)
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (48, 'Brad', 'Pitt');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (49, 'Helena', 'Bonham Carter');
+
+--Trainspotting
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (50, 'Ewan', 'McGregor');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (51, 'Ewen', 'Bremmer');
+INSERT INTO Actor (ID, First_Name, Last_Name)
+VALUES (52, 'Jonny Lee', 'Miller');
+
+
+      --Directors
+--In Bruges, Bansees of Inisherin
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (1, 'Martin', 'McDough');
+
+--Parasite, Memories of murder
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (2, 'Bong', 'Joon Ho');
+
+--The lighthouse
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (3, 'Robert', 'Eggers');
+
+--The room
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (4, 'Tommy', 'Wiseau');
+
+--The game, Fight Club
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (5, 'David', 'Fincher');
+
+--Eternal Sunshine of the spotless mind
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (6, 'Michel', 'Goundry');
+
+--Birdman
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (7, 'Alejandro', 'G.Inarritu');
+
+--Scott Piligrim
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (8, 'Edgar', 'Wright');
+
+--Cars
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (9, 'John', 'Lasseter');
+
+--The naked gun
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (10, 'David', 'Zucker');
+
+--Shrek
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (11, 'Andrew', 'Adamson');
+
+--Memento
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (12, 'Christopher', 'Nolan');
+
+--Shutter Island
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (13, 'Martin', 'Scorsesse');
+
+--Fantastic Mister Fox
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (14, 'Wes', 'Anderson');
+
+--The Lobster
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (15, 'Yorgos', 'Lanthimos');
+
+--Trainspotting
+INSERT INTO Director (ID, First_Name, Last_Name)
+VALUES (16, 'Danny', 'Boyle');
+
+
+-- Movie
+-- In Bruges
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (1, 'In Bruges', 8, 1, CONVERT(DATE,'2008-01-17', 23), 'Two hitmen await orders in Bruges, Belgium, after a botched job.');
+
+-- Parasite
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (2, 'Parasite', 9, 2, CONVERT(DATE,'2019-05-21', 23), 'A poor family schemes to become employed by a wealthy family.');
+
+-- The Lighthouse
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (3, 'The Lighthouse', 8, 3, CONVERT(DATE,'2019-10-18', 23), 'Two lighthouse keepers try to maintain their sanity while living on a remote and mysterious New England island in the 1890s.');
+
+-- The Room
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (4, 'The Room', 10, 4, CONVERT(DATE,'2003-06-27', 23), 'A successful banker`s life falls apart when he discovers his wife`s infidelity.');
+
+-- The Game
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (5, 'The Game', 7, 5, CONVERT(DATE,'1997-09-12', 23), 'A wealthy banker is given an opportunity to participate in a game that integrates with his real life.');
+
+-- Eternal Sunshine of the Spotless Mind
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (6, 'Eternal Sunshine of the Spotless Mind', 8, 6, CONVERT(DATE,'2004-03-19', 23), 'A man undergoes a medical procedure to erase memories of a failed relationship.');
+
+-- Birdman
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (7, 'Birdman', 9, 7, CONVERT(DATE,'2014-10-17', 23), 'A washed-up actor tries to revive his career by directing and starring in a Broadway play.');
+
+-- Scott Pilgrim vs. the World
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (8, 'Scott Pilgrim vs. the World', 8, 8, CONVERT(DATE,'2010-08-13', 23), 'Scott Pilgrim must defeat his new girlfriend`s seven evil exes in order to win her heart.');
+
+-- Banshees of Inisherin
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (9, 'Banshees of Inisherin', 8, 1, CONVERT(DATE,'2022-09-22', 23), 'Two lifelong friends find themselves at an impasse when one abruptly ends their relationship, with alarming consequences for both of them.');
+
+-- Cars
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (10, 'Cars', 7, 9, CONVERT(DATE,'2006-06-09', 23), 'A race car that learns the importance of friendship and cooperation.');
+
+-- Memories of Murder
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (11, 'Memories of Murder', 8, 2, CONVERT(DATE,'2003-05-02', 23), 'A true-crime story about the investigation of a series of brutal murders.');
+
+-- The Naked Gun
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (12, 'The Naked Gun', 7, 10, CONVERT(DATE,'1988-12-02', 23), 'A bumbling police detective tries to stop an assassination plot.');
+
+-- Shrek
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (13, 'Shrek', 8, 11, CONVERT(DATE,'2001-05-18', 23), 'An ogre embarks on a journey to rescue Princess Fiona and discovers the value of friendship and acceptance.');
+
+-- Memento
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (14, 'Memento', 9, 12, CONVERT(DATE,'2000-09-05', 23), 'A man with short-term memory loss tries to solve the mystery of his wife`s murder.');
+
+-- Shutter Island
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (15, 'Shutter Island', 8, 13, CONVERT(DATE,'2010-02-19', 23), 'Two U.S. Marshals investigate the disappearance of a prisoner from a mental institution.');
+
+-- Fantastic Mr. Fox
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (16, 'Fantastic Mr. Fox', 8, 14, CONVERT(DATE,'2009-11-25', 23), 'An animated film about a clever fox who outwits three mean farmers.');
+
+-- The Lobster
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (17, 'The Lobster', 7, 15, CONVERT(DATE,'2015-05-15', 23), 'In a dystopian society, single people must find a mate within 45 days or be transformed into animals.');
+
+-- Fight Club
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (18, 'Fight Club', 9, 5, CONVERT(DATE,'1999-10-15', 23), 'An insomniac office worker and a soap salesman form an underground fight club.');
+
+-- Trainspotting
+INSERT INTO Movie (ID, Title, Rating, Director_ID, Release_date, Plot)
+VALUES (19, 'Trainspotting', 8, 16, CONVERT(DATE,'1996-02-23', 23), 'A group of heroin addicts navigate life in Edinburgh.');
+
+
+
+        --Roles
+
+-- In Bruges
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (1, 1, 'Ray');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (2, 1, 'Ken');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (3, 1, 'Harry');
+
+-- Parasite
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (4, 2, 'Kim Ki-taek');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (5, 2, 'Park Dong-ik');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (6, 2, 'Yeon-kyo');
+
+-- The Lighthouse
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (7, 3, 'Thomas Howard');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (8, 3, 'Thomas Wake');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (9, 3, 'Mermaid');
+
+-- The Room
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (10, 4, 'Johnny');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (11, 4, 'Lisa');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (12, 4, 'Mark');
+
+-- The Game
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (13, 5, 'Nicholas Van Orton');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (14, 5, 'Conrad');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (15, 5, 'Christine');
+
+-- Eternal Sunshine of the Spotless Mind
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (16, 6, 'Joel Barish');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (17, 6, 'Clementine Kruczynski');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (18, 6, 'Patrick');
+
+-- Birdman
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (19, 7, 'Riggan Thomson');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (20, 7, 'Sam Thompson');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (21, 7, 'Mike Shiner');
+
+-- Scott Pilgrim vs. the World
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (22, 8, 'Scott Pilgrim');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (23, 8, 'Ramona Flowers');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (24, 8, 'Wallace Wells');
+
+-- Banshees of Inisherin
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (1, 9, 'Padraic');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (2, 9, 'Colm');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (25, 9, 'Siobhan');
+
+-- Cars
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (26, 10, 'Lightning McQueen');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (27, 10, 'Doc Hudson');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (28, 10, 'Sally Carrera');
+
+-- Memories of Murder
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (4, 11, 'Detective Park Doo-man');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (29, 11, 'Detective Seo Tae-yoon');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (30, 11, 'Detective Cho Yong-koo');
+
+-- The Naked Gun
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (31, 12, 'Frank Drebin');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (32, 12, 'Jane Spencer');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (33, 12, 'Nordberg');
+
+-- Shrek
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (34, 13, 'Shrek');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (35, 13, 'Donkey');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (36, 13, 'Princess Fiona');
+
+-- Memento
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (37, 14, 'Leonard Shelby');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (38, 14, 'Natalie');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (39, 14, 'Teddy');
+
+-- Shutter Island
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (40, 15, 'Teddy Daniels');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (41, 15, 'Chuck Aule');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (42, 15, 'Dr. Cawley');
+
+-- Fantastic Mister Fox
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (43, 16, 'Mr. Fox');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (44, 16, 'Felicity Fox');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (45, 16, 'Clive Badger');
+
+-- The Lobster
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (1, 17, 'David');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (46, 17, 'Short Sighted Woman');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (47, 17, 'Loner Leader');
+
+-- Fight Club
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (48, 18, 'Tyler Durden');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (20, 18, 'Narrator');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (49, 18, 'Marla Singer');
+
+-- Trainspotting
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (50, 19, 'Rent Boy');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (51, 19, 'Sprud');
+INSERT INTO Role (Actor_ID, Movie_ID, Name)
+VALUES (52, 19, 'Sick Boy');
+
+        -- Trailer
+--In Bruges
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (1, 1, 'https://www.imdb.com/video/vi783417625/?playlistId=tt0780536_=tt_pr_ov_vi');
+
+--Parasite
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (2, 2, 'https://www.imdb.com/video/vi1015463705/?playlistId=tt6751668_=tt_ov_vi');
+
+--The Lighthouse
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (3, 3, 'https://www.imdb.com/video/vi195542809/?playlistId=tt7984734_=tt_pr_ov_vi');
+
+--The room
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (4, 4, 'https://www.imdb.com/video/vi1546846745/?playlistId=tt0368226_=tt_ov_vi');
+
+--The game
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (5, 5, 'https://www.imdb.com/video/vi3301942297/?playlistId=tt0119174_=tt_ov_vi');
+
+--Eternal Sunshine of the spotless mind
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (6, 6, 'https://www.imdb.com/video/vi2292515097/?playlistId=tt0338013_=tt_ov_vi');
+
+--Birdman
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (7, 7, 'https://www.imdb.com/video/vi1378069529/?playlistId=tt2562232_=tt_ov_vi');
+
+--Scott Piligrim
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (8, 8, 'https://www.imdb.com/video/vi4036739097/?playlistId=tt0446029_=tt_ov_vi');
+
+--Banshees of Inisherin
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (9, 9, 'https://www.imdb.com/video/vi1001440537/?playlistId=tt11813216_=tt_ov_vi');
+
+--Cars
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (10, 10, 'https://www.imdb.com/video/vi2753079577/_=ttvi_vi_imdb_2');
+
+--Memories of murder
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (11, 11, 'https://www.imdb.com/video/vi3468476697/?playlistId=tt0353969_=tt_ov_vi');
+
+--The naked gun
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (12, 12, 'https://www.imdb.com/video/vi3084976409/?playlistId=tt0095705_=tt_ov_vi');
+
+--Shrek
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (13, 13, 'https://www.imdb.com/video/vi4085711129/?playlistId=tt0126029_=tt_ov_vi');
+
+--Memento
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (14, 14, 'https://www.imdb.com/video/vi4085711129/?playlistId=tt0126029_=tt_ov_vi');
+
+--Shutter Island
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (15, 15, 'https://www.imdb.com/video/vi4064281/?playlistId=tt1130884_=tt_ov_vi');
+
+--Fantastic mr. Fox
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (16, 16, 'https://www.imdb.com/video/vi3713925657/?playlistId=tt0432283_=tt_ov_vi');
+
+--The Lobster
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (17, 17, 'https://www.imdb.com/video/vi2703471385/?playlistId=tt3464902_=tt_ov_vi');
+
+--Fight Club
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (18, 18, 'https://www.imdb.com/video/vi781228825/?playlistId=tt0137523_=tt_ov_vi');
+
+--Trainspotting
+INSERT INTO Trailer (ID, Movie_ID, URL)
+VALUES (19, 19, 'https://www.imdb.com/video/vi2148899865/?playlistId=tt0117951_=tt_ov_vi');
+
+        -- Genre
+INSERT INTO Genre (ID, Name)
+VALUES (1, 'Drama');
+
+INSERT INTO Genre (ID, Name)
+VALUES (2, 'Comedy');
+
+INSERT INTO Genre (ID, Name)
+VALUES (3, 'Thriller');
+
+INSERT INTO Genre (ID, Name)
+VALUES (4, 'Action');
+
+INSERT INTO Genre (ID, Name)
+VALUES (5, 'Animation');
+
+INSERT INTO Genre (ID, Name)
+VALUES (6, 'Mystery');
+
+INSERT INTO Genre (ID, Name)
+VALUES (7, 'Romance');
+
+INSERT INTO Genre (ID, Name)
+VALUES (8, 'Fantasy');
+
+INSERT INTO Genre (ID, Name)
+VALUES (9, 'Crime');
+
+INSERT INTO Genre (ID, Name)
+VALUES (10, 'Adventure');
+
+        -- Movie_Genre
+--In Bruges (Drama, Comedy)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (1, 1);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (1, 2);
+
+--Parasite (Drama, Thriller)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (2, 1);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (2, 3);
+
+--The Lighthouse (Drama, Mystery)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (3, 1);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (3, 6);
+
+--The Room (Drama, Romance)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (4, 1);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (4, 7);
+
+--The Game (Thriller, Mystery)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (5, 3);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (5, 6);
+
+--Eternal Sunshine of the Spotless Mind (Drama, Romance)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (6, 1);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (6, 7);
+
+--Birdman (Drama, Comedy)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (7, 1);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (7, 2);
+
+--Scott Pilgrim (Action, Comedy)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (8, 4);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (8, 2);
+
+--Banshees of Inisherin (Drama, Comedy)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (9, 1);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (9, 2);
+
+--Cars(Animation, Comedy)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (10, 5);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (10, 2);
+
+--Memories of Murder (Crime, Drama)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (11, 9);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (11, 1);
+
+--The Naked Gun (Comedy, Crime)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (12, 2);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (12, 9);
+
+--Shrek (Animation, Adventure)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (13, 5);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (13, 10);
+
+--Memento (Mystery, Thriller)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (14, 6);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (14, 3);
+
+--Shutter Island (Mystery, Thriller)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (15, 6);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (15, 3);
+
+--Fantastic Mr. Fox (Animation, Adventure)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (16, 5);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (16, 10);
+
+--The Lobster (Drama, Romance)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (17, 1);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (17, 7);
+
+--Fight Club (Drama, Thriller)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (18, 1);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (18, 3);
+
+--Trainspotting (Drama, Crime)
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (19, 1);
+
+INSERT INTO Movie_Genre (Movie_ID, Genre_ID)
+VALUES (19, 9);
+
+        -- Language
+INSERT INTO Language (ID, Name)
+VALUES (1, 'English');
+
+INSERT INTO Language (ID, Name)
+VALUES (2, 'Korean');
+
+INSERT INTO Language (ID, Name)
+VALUES (3, 'Strange Scottish');
+
+        --Movie_Language
+--In Bruges
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (3, 1);
+
+--Parasite
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (2, 2);
+
+--The Lighthouse
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 3);
+
+--The room
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 4);
+
+--The game
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 5);
+
+--Eternal Sunshine of the spotless mind
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 6);
+
+--Birdman
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 7);
+
+--Scott Piligrim
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 8);
+
+--Banshees of Inisherin
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (3, 9);
+
+--Cars
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 10);
+
+--Memories of murder
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (2, 11);
+
+--The naked gun
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 12);
+
+--Shrek
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 13);
+
+--Memento
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 14);
+
+--Shutter Island
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 15);
+
+--Fantastic mr. Fox
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 16);
+
+--The Lobster
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 17);
+
+--Fight Club
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (1, 18);
+
+--Trainspotting
+INSERT INTO Movie_Language (Language_ID, Movie_ID)
+VALUES (3, 19);
+
+
+        --User
+INSERT INTO User_ (ID, Username, Email, Password_)
+VALUES (1, 'Sir_un', 'serunets@gmail.com', 'KakiPuki2');
+
+INSERT INTO User_ (ID, Username, Email, Password_)
+VALUES (2, 'Peace_Duke', 'puliotbabuli@gamil.com', 'Dukeofpeace');
+
+INSERT INTO User_ (ID, Username, Email, Password_)
+VALUES (3, 'Smart_Fella', 'fartsmella@gmail.com', 'qwerty12');
+
+INSERT INTO User_ (ID, Username, Email, Password_)
+VALUES (4, 'Vonyuchka', 'darushka05@gmail.com', 'Copper1950');
+
+INSERT INTO User_ (ID, Username, Email, Password_)
+VALUES (5, 'Lox', '0974311585h@gmail.com', 'Loxdeb');
+
+INSERT INTO User_ (ID, Username, Email, Password_)
+VALUES (6, '04ko|_|_|H1k', 'theusernameisalreadyhardenogh@gmail.com', 'dontknow28173');
+
+INSERT INTO User_ (ID, Username, Email, Password_)
+VALUES (7, '>K0na', 'writtenonmyring@gmail.com', 'Clipperlover2811');
+
+INSERT INTO User_ (ID, Username, Email, Password_)
+VALUES (8, 'COOLRUNER', 'crazymegasupergamer@gmail.com', 'Farcry3');
+
+INSERT INTO User_ (ID, Username, Email, Password_)
+VALUES (9, 'LOOKSMAXXXXXXXXER', 'mewing247@gmail.com', 'edgingenjoyer');
+
+INSERT INTO User_ (ID, Username, Email, Password_)
+VALUES (10, 'kryshtalevizamki', 'feyinevoli@gmail.com', 'gryazyuka`12');
+
+        --Award_Category
+--Golden Globe
+INSERT INTO Award_Category (ID, Name)
+VALUES (1, 'Golden Globe Awards');
+
+--Oscar
+INSERT INTO Award_Category (ID, Name)
+VALUES (2, 'Oscar');
+
+--Cannes
+INSERT INTO Award_Category (ID, Name)
+VALUES (3, 'Cannes Film Festival');
+
+--BAFTA
+INSERT INTO Award_Category (ID, Name)
+VALUES (4, 'The British Academy of Film and Television Arts');
+
+--New York International Independent Film & Video Festival
+INSERT INTO Award_Category (ID, Name)
+VALUES (5, 'New York International Independent Film Video Festival');
+
+--Critics' Choice Movie Award
+INSERT INTO Award_Category (ID, Name)
+VALUES (6, 'Critics` Choice Movie Award');
+
+--British Independent Film Award
+INSERT INTO Award_Category (ID, Name)
+VALUES (7, 'British Independent Film Award');
+
+--Satellite Award
+INSERT INTO Award_Category (ID, Name)
+VALUES (8, 'Satellite Award');
+
+        --Awards
+--In Bruges
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (1, 1, 'Golden Globe Award for Best Actor', CONVERT(DATE,'2009-01-01', 23), 1, 1, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (2, 1, 'BAFTA Award for Best Original Screenplay', CONVERT(DATE,'2009-01-01', 23), 4, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (3, 1, 'British Independent Film Award for Best Screenplay', CONVERT(DATE,'2009-01-01', 23), 7, NULL, NULL);
+
+--Parasite
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (4, 2, 'Academy Award for Best Picture' , CONVERT(DATE,'2020-01-01', 23), 2, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (5, 2, 'Academy Award for Best Directing', CONVERT(DATE,'2020-01-01', 23), 2, NULL, 2);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (6, 2, 'Academy Award for Best International Feature Film', CONVERT(DATE,'2020-01-01', 23), 2, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (7, 2, 'Academy Award for Writing' ,CONVERT(DATE,'2020-01-01', 23), 2, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (8, 2, 'Academy Award for Best Film Editing' ,CONVERT(DATE,'2020-01-01', 23), 2, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (9, 2, 'The Palme d`Or' ,CONVERT(DATE,'2020-01-01', 23), 3, NULL, NULL);
+
+
+--I`ll die of age and boredom if continue
+
+--The Lighthouse
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (10, 3, 'Satellite Award for Best Actor in a Supporting Role' ,CONVERT(DATE,'2019-01-01', 23), 8, NULL, NULL);
+
+--The room
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (11, 4, 'New York International Independent Film Video Festival Award' ,CONVERT(DATE,'2003-01-01', 23), 5, NULL, NULL);
+
+--The game
+
+
+--Eternal Sunshine of the spotless mind
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (12, 6, 'Academy Award for Writing' ,CONVERT(DATE,'2005-01-01', 23), 2, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (13, 6,'BAFTA Award for Best Editing', CONVERT(DATE,'2005-01-01', 23), 4, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (14, 6,'BAFTA Award for Best Original Screenplay', CONVERT(DATE,'2005-01-01', 23), 4, NULL, NULL);
+
+--Birdman
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (15, 7,'Academy Award for Best Picture', CONVERT(DATE,'2015-01-01', 23), 2, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (16, 7,'Academy Award for Best Directing', CONVERT(DATE,'2015-01-01', 23), 2, NULL, 7);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (17, 7, 'Academy Award for Best Cinematography', CONVERT(DATE,'2015-01-01', 23), 2, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (18, 7, 'Academy Award for Writing', CONVERT(DATE,'2015-01-01', 23), 2, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (19, 7, 'Critics` Choice Movie Award for Best Actor', CONVERT(DATE,'2015-01-01', 23), 6, 19, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (20, 7, 'Golden Globe Award for Best Actor', CONVERT(DATE,'2015-01-01', 23), 1, 19, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (21, 7, 'Critics Choice Movie Award for Best Acting Ensemble',  CONVERT(DATE,'2015-01-01', 23), 6, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (22, 7, 'Satellite Award for Best Original Score', CONVERT(DATE,'2015-01-01', 23), 8, NULL, NULL);
+
+--Scott Piligrim
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (23, 8,'Satellite Award for Best Actor - Motion Picture Musical or Comedy' , CONVERT(DATE,'2010-01-01', 23), 8, 22, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (24, 8,'Satellite Award for Best Motion Picture, Comedy or Musical',  CONVERT(DATE,'2010-01-01', 23), 8, NULL, NULL);
+
+--Banshees of Inisherin
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (25, 9, 'Golden Globe Award for Best Screenplay', CONVERT(DATE,'2022-01-01', 23), 1, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (26, 9, 'Golden Globe Award for Best Actor', CONVERT(DATE,'2022-01-01', 23), 1, 1, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (27, 9, 'Golden Globe Award for Best Motion Picture', CONVERT(DATE,'2022-01-01', 23), 1, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (28, 9, 'BAFTA Award for Best Actor in a Supporting Role', CONVERT(DATE,'2023-01-01', 23), 4, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (29, 9, 'BAFTA Award for Best Actress in a Supporting Role', CONVERT(DATE,'2023-01-01', 23), 4, 25, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (30, 9, 'BAFTA Award for Outstanding British Film', CONVERT(DATE,'2023-01-01', 23), 4, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (31, 9, 'BAFTA Award for Best Original Screenplay', CONVERT(DATE,'2023-01-01', 23), 4, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (32, 9, 'Satellite Award for Best Screenplay', CONVERT(DATE,'2022-01-01', 23), 8, NULL, NULL);
+--Cars
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (33, 10, 'Golden Globe Award for Best Animated Feature Film', CONVERT(DATE,'2007-01-01', 23), 1, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (34, 10, 'Critics` Choice Movie Award for Best Animated Feature', CONVERT(DATE,'2007-01-01', 23), 6, NULL, NULL);
+
+--Memories of murder
+
+
+--The naked gun
+
+
+--Shrek
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (35, 13, 'Academy Award for Best Animated Feature', CONVERT(DATE,'2002-01-01', 23), 2, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (36, 13, 'Critics` Choice Movie Award for Best Animated Feature', CONVERT(DATE,'2002-01-01', 23), 6, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (37, 13, 'BAFTA Award for Best Adapted Screenplay', CONVERT(DATE,'2002-01-01', 23), 4, NULL, NULL);
+
+--Memento
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (38, 14, 'Critics` Choice Movie Award for Best Original Screenplay', CONVERT(DATE,'2002-01-01', 23), 6, NULL, NULL);
+
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (39, 14, 'British Independent Film Award for Best Foreign Independent Film', CONVERT(DATE,'2002-01-01', 23), 7, NULL, NULL);
+--Shutter Island
+
+
+--Fantastic mr. Fox
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (40, 16, 'Satellite Award for Best Animated or Mixed Media Feature', CONVERT(DATE,'2009-01-01', 23), 8, NULL, NULL);
+
+--The Lobster
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (41, 17, 'Cannes Jury Prize', CONVERT(DATE,'2015-01-01', 23), 3, NULL, NULL);
+
+--Fight Club
+
+--Trainspotting
+INSERT INTO Award (ID, Movie_ID, Name, Year, Award_Category_ID, Actor_ID, Director_ID)
+VALUES (43, 19, 'BAFTA Award for Best Adapted Screenplay', CONVERT(DATE,'1996-01-01', 23), 4, NULL, NULL);
+
+
+        --Rewiev (All the rewievs were taken from Letterboxd because they are shorter and I like them more)
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (1, 1, 5, 9, 'colin farrell ended homophobia when he got high on cocaine and ordered one gay beer', CONVERT(DATE,'2015-05-14', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (2, 18, 4, 10, 'My boyfriend is literally Tyler Durden', CONVERT(DATE,'2020-08-22', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (3, 12, 2, 10, 'masterpiece',CONVERT(DATE,'2014-07-26', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (4, 10, 8, 8, 'How the f`ck do these cars reproduce', CONVERT(DATE,'2020-11-30', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (5, 6, 3, 8, 'this also happened when i dyed my hair',  CONVERT(DATE,'2010-11-09', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (6, 7, 4, 10, 'this is like fight club for theater kids', CONVERT(DATE,'2019-04-15', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (7, 17, 1, 8, 'There`s a scene where Colin Farrell kicks a little girl and for some reason it`s the funniest thing I`ve seen all year.', CONVERT(DATE,'2017-06-12', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (8, 4, 6, 10, '"The Room" masterfully written, directed, produced, and starring Tommy Wiseau tells the Shakespearean tragedy of Johnny, a banker who is betrayed by the "love of his life", Lisa. Fueled by powerful performances and flawless directing, "The Room" is a masterpiece in filmmaking that will definetely leave it`s audience speechless.', CONVERT(DATE,'2017-02-10', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (9, 15, 9, 9, 'and that is why you should always read tripadvisor reviews first', CONVERT(DATE,'2020-10-14', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (10, 13, 7, 6, 'still trying to figure out the science behind how donkey and dragon had babies', CONVERT(DATE,'2019-10-09', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (11, 11, 8, 9, 'I love when the dude in this just dropkicks everyone', CONVERT(DATE,'2015-01-26', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (12, 9, 5, 10, 'That one unemployed friend at 2pm on a tuesday:', CONVERT(DATE,'2023-11-22', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (13, 14, 8, 9, 'this is what finding dory should have been', CONVERT(DATE,'2020-05-07', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (14, 3, 10, 7, 'we`re raping mermaids now?? god not even FISH ARE SAFE',CONVERT(DATE,'2019-10-25', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (15, 13, 2, 8, 'so this is what tarkovsky meant by "poetic cinema"', CONVERT(DATE,'2022-08-05', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (16, 12, 5, 7, 'The Naked Gun is one of the funniest comedies in film history. Made in an era when you could still make fun of everything and everyone without receiving a backlash from shortsighted PC warriors.', CONVERT(DATE,'2018-08-19', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (17, 18, 10, 10, 'why doesn`t my sleep deprivation have brad pitt as a side effect', CONVERT(DATE,'2021-01-01', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (18, 16, 3, 9, 'how does steven soderbergh sleep at night knowing the best movie in the ocean`s trilogy is a stop-motion puppet animation directed by wes anderson', CONVERT(DATE,'2018-01-29', 23));
+
+INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+VALUES (19, 19, 1, 8, 'what the scottish have done with language is downright experimental', CONVERT(DATE,'2021-11-29', 23));
+
+        --Watchlist
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(1, 3, 2);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(2, 4, 2);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(3, 1, 4);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(4, 7, 3);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(5, 2, 10);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(6, 18, 4);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(7, 13, 7);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(8, 9, 9);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(9, 3, 3);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(10, 15, 8);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(11, 17, 2);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(12, 11, 9);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(13, 10, 10);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(14, 6, 9);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(15, 10, 6);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(16, 8, 1);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(17, 16, 3);
+
+INSERT INTO Watchlist (ID, Movie_ID, User__ID)
+VALUES(18, 12, 5);

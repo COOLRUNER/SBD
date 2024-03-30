@@ -1,0 +1,148 @@
+Procedures:
+
+1) The procedure calculates average rating for a chosen movie based on the rewievs in the Rewiev table.
+ 
+CREATE PROCEDURE Calculate_average_review_rating_and_then_swap_it_with_actual_rating_that_I_have_set_long_time_ago
+    @MovieID int
+AS
+BEGIN
+    DECLARE @TotalRating int
+    DECLARE @NumReviews int
+    DECLARE @AverageRating float
+    SELECT @TotalRating = SUM(Rating), @NumReviews = COUNT(*)
+    FROM Rewiev
+    WHERE Movie_ID = @MovieID
+    IF @NumReviews > 0
+    BEGIN
+        SET @AverageRating = CAST(@TotalRating AS float) / @NumReviews
+        UPDATE Movie
+        SET Rating = @AverageRating
+        WHERE ID = @MovieID
+    END
+END
+
+--test
+-- INSERT INTO Rewiev (ID, Movie_ID, User__ID, Rating, User_Rewiev, "Date")
+-- VALUES (1687, 12, 5, 1, 'test', CONVERT(DATE,'2018-08-19', 23));
+
+-- test
+-- EXEC Calculate_average_review_rating_and_then_swap_it_with_actual_rating_that_I_have_set_long_time_ago 12;
+
+2) This procedure shows information about top 10 recent genres. It takes 10 movies from most recent rewievs and counts genre categories of those films. After that it prints top 10 genres in the descending order.
+
+CREATE PROCEDURE Top_recent_genres_I_cant_add_more_but_will_maybe_think_about_it_in_the_near_future_maybe_not
+AS
+BEGIN
+    WITH RecentReviews AS (
+        SELECT TOP 10 Rewiev.Movie_ID, Movie.Title, Genre.Name AS Genre
+        FROM Rewiev
+        INNER JOIN Movie ON Rewiev.Movie_ID = Movie.ID
+        INNER JOIN Movie_Genre  ON Movie.ID = Movie_Genre.Movie_ID
+        INNER JOIN Genre  ON Movie_Genre.Genre_ID = Genre.ID
+        ORDER BY Rewiev.Date DESC
+    )
+
+    SELECT Genre, COUNT(*) AS ReviewCount
+    FROM RecentReviews
+    GROUP BY Genre
+    ORDER BY ReviewCount DESC;
+END;
+
+-- test
+-- EXEC Top_recent_genres_I_cant_add_more_but_will_maybe_think_about_it_in_the_near_future_maybe_not;
+
+-- INSERT INTO Rewiev (ID, Movie_ID, Rating, User_Rewiev, Date, User__ID)
+-- VALUES (2232, 17, 9,'SHJA', '2024-01-06', 2);
+-- INSERT INTO Rewiev (ID, Movie_ID, Rating, User_Rewiev, Date, User__ID)
+-- VALUES (2234, 17, 9,'SHJA', '2024-01-06', 2);
+-- INSERT INTO Rewiev (ID, Movie_ID, Rating, User_Rewiev, Date, User__ID)
+-- VALUES (2236, 17, 9,'SHJA', '2024-01-06', 2);
+
+
+Triggers:
+
+1)Folloving trigger prevents user from deleting a director who has created a minimum of 2 movies with awards. If the director doesn`t have atleast 2 awarded movies, the trigger clears all the data connected to this director.
+
+CREATE TRIGGER Prevent_deleting_worthy_directors_with_at_least_2_awards_for_each_movie
+ON Director
+INSTEAD OF DELETE
+AS
+BEGIN
+    DECLARE cur CURSOR FOR SELECT ID FROM deleted;
+    DECLARE @ID int;
+    OPEN cur;
+    FETCH NEXT FROM cur INTO @ID;
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        DECLARE @COUNT int;
+        SELECT @COUNT = COUNT(*)
+        FROM Movie m
+        INNER JOIN Director ON Director.ID = m.Director_ID
+        WHERE Director.ID = @ID
+        AND EXISTS(SELECT 1 FROM Award WHERE m.ID = Award.Movie_ID);
+        IF @COUNT >= 2 RAISERROR ('You can`t delete a director who has atleast 2 movies with awards', 16, 1);
+        ELSE
+        BEGIN
+        DELETE FROM Rewiev WHERE Movie_ID IN (SELECT Movie.ID FROM Movie INNER JOIN Director ON Director.ID = Movie.Director_ID WHERE Director_ID = @ID);
+        DELETE FROM Role WHERE Movie_ID IN (SELECT Movie.ID FROM Movie INNER JOIN Director ON Director.ID = Movie.Director_ID WHERE Director_ID = @ID);
+        DELETE FROM Award WHERE Movie_ID IN (SELECT Movie.ID FROM Movie INNER JOIN Director ON Director.ID = Movie.Director_ID WHERE Director_ID = @ID);
+        DELETE FROM Watchlist WHERE Movie_ID IN (SELECT Movie.ID FROM Movie INNER JOIN Director ON Director.ID = Movie.Director_ID WHERE Director_ID = @ID);
+        DELETE FROM Movie_Language WHERE Movie_ID IN (SELECT Movie.ID FROM Movie INNER JOIN Director ON Director.ID = Movie.Director_ID WHERE Director_ID = @ID);
+        DELETE FROM Movie_Genre WHERE Movie_ID IN (SELECT Movie.ID FROM Movie INNER JOIN Director ON Director.ID = Movie.Director_ID WHERE Director_ID = @ID);
+        DELETE FROM Trailer WHERE Movie_ID IN (SELECT Movie.ID FROM Movie INNER JOIN Director ON Director.ID = Movie.Director_ID WHERE Director_ID = @ID);
+        DELETE FROM Movie WHERE Director_ID =@ID;
+        DELETE FROM Director WHERE ID = @ID;
+
+        END;
+        FETCH NEXT FROM cur INTO @ID;
+    END;
+    CLOSE cur;
+    DEALLOCATE cur;
+END;
+
+--test
+-- DELETE Director
+-- WHERE ID =2;
+--
+-- DELETE Director
+-- WHERE ID = 1;
+--
+-- DELETE Director
+-- WHERE ID = 3;
+
+2) The trigger prevents user from changing the rewiev if it is not older than 2 days. However, if the rewiev is older than 2 days, the trigger updates the rewiev`s date to the current date.
+
+CREATE TRIGGER Dont_try_to_change_the_rewiev_if_its_not_older_than_2_days_if_it_in_fact_is_then_date_changes_to_current
+ON Rewiev
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE cur CURSOR FOR SELECT ID, Date FROM deleted;
+    DECLARE @ID int, @Date DATE;
+    OPEN cur;
+    FETCH NEXT FROM cur INTO @ID, @Date;
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        IF DATEDIFF (DAY , @Date, GETDATE()) <= 2
+            BEGIN
+                RAISERROR ('Your rewiev is not old enough ', 16,1);
+                ROLLBACK;
+            END;
+        ELSE BEGIN
+            UPDATE Rewiev
+            SET Date = GETDATE()
+            WHERE ID = @ID;
+        END;
+        FETCH NEXT FROM cur INTO @ID, @Date;
+    END;
+    CLOSE cur;
+    DEALLOCATE cur;
+END;
+
+--test
+-- UPDATE Rewiev
+-- SET User_Rewiev = 'TEST'
+-- WHERE ID = 223
+--
+-- INSERT INTO Rewiev (ID, Movie_ID, Rating, User_Rewiev, Date, User__ID)
+-- VALUES (223, 17, 9,'SHJA', '2024-01-06', 2);
